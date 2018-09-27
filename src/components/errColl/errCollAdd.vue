@@ -33,26 +33,26 @@
           </el-col>
         </el-row>
         <hr id="seg">
-      <ul>
+      <ul style="padding:0">
           <li v-for='(list,index) in form.refers' v-bind:key='list.id' style="list-style: none">
             <el-row :gutter="20">
               <el-col :span="6">
                 <el-form-item label="参考描述">
-                  <el-input v-model="refer.sourceDesc"></el-input>
+                  <el-input v-model="list.sourceDesc"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="参考url">
-                  <el-input v-model="refer.sourceUrl"></el-input>
+                  <el-input v-model="list.sourceUrl"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="是否有用">
-                  <el-switch v-model="refer.isUseful"></el-switch>
+                  <el-switch v-model="list.isUseful"></el-switch>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
-                <el-button type="danger" icon="el-icon-delete" @click='form.refers.splice(index, 1)'>删除</el-button>
+                <el-button type="danger" icon="el-icon-delete" @click='list.splice(index, 1)'>删除</el-button>
               </el-col>
             </el-row>
           </li>
@@ -81,12 +81,6 @@ export default {
           category: '',
           refers: []
         },
-        refer:{
-          sourceDesc: '',
-          sourceUrl: '',
-          isUseful: true
-        },
-        nextTodoId: 0,
         cates:[{value: 'java'},{value: 'vue'},{value: 'linux'}]
     }
   },
@@ -116,9 +110,12 @@ export default {
     },
     clear(){
       this.form = {
+          id: '',
           errDescription: '',
           errCauseBy: '',
-          errSolution: ''
+          errSolution: '',
+          category: '',
+          refers: []
       }
     },
     handleBack(){
@@ -126,12 +123,12 @@ export default {
       this.$parent.show = 'errCollList';
     },
     addRefer(){
+      //通过向数组里面添加数据来动态控制dom个数，然后利用vue双向绑定来赋值，上面的list其实就是每个dom的值，
       this.form.refers.push({
-			  sourceDesc: this.refer.sourceDesc,
-        sourceUrl: this.refer.sourceUrl,
-        isUseful: this.refer.isUseful
+			  sourceDesc: '',
+        sourceUrl: '',
+        isUseful: true
       })
-      this.nextTodoId++;
     }
   }
 }
