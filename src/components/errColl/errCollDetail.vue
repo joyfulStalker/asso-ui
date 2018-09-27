@@ -4,8 +4,7 @@
       <span>错误详情</span>
       <el-button style="float: right; padding: 3px 0" type="text" @click="handleBack">返回</el-button>
     </div>
-    <div>
-      <el-form label-width="100px"  style="width:600px;">
+      <el-form label-width="100px"  style="width:600px;height:600px">
           <el-row label-width="100px">
             <el-form-item label="错误描述: " style="color: green;margin:10px 0;">{{showData.errDescription}}</el-form-item>
           </el-row>
@@ -16,7 +15,6 @@
             <el-form-item label="解决方法: " style="color: green;margin:10px 0;">{{showData.errSolution}}</el-form-item>
           </el-row>
       </el-form>
-    </div>
   </el-card>
 
 </template>
