@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card" >
+  <el-card class="box-card"  style="width:100%;height:100%">
     <div slot="header" class="clearfix">
       <span>错误详情</span>
       <el-button style="float: right; padding: 3px 0" type="text" @click="handleBack">返回</el-button>
@@ -14,7 +14,7 @@
           <el-row label-width="100px">
             <el-form-item label="解决方法: " style="color: green;margin:10px 0;">{{showData.errSolution}}</el-form-item>
           </el-row>
-
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
           <hr>
 
           <ul >
@@ -53,7 +53,7 @@ export default {
           "errCollId": '',
           "refers": []
         },
-
+        imageUrl:'https://oscimg.oschina.net/oscnet/2c9b96c2b5d76906cebc256c881e31302be.jpg'
     }
   },
   created() {
@@ -103,5 +103,11 @@ export default {
   .box-card {
     width: 100%;
     height: 100%;
+  }
+
+  .avatar {
+    width: 278px;
+    height: 278px;
+    display: block;
   }
 </style>

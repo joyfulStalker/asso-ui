@@ -34,66 +34,67 @@ let router = new Router({
       children: [
         {path: '/dashboard', component: Dashboard, name: '首页', menuShow: true}
       ]
-    },
-    {
-      path: '/',
-      component: Home,
-      name: '用户管理',
-      menuShow: true,
-      leaf: true, // 只有一个节点
-      iconCls: 'iconfont icon-users', // 图标样式class
-      children: [
-        {path: '/user/list', component: UserList, name: '用户列表', menuShow: true}
-      ]
-    },
-    {
-      path: '/',
-      component: Home,
-      name: '图书管理',
-      menuShow: true,
-      iconCls: 'iconfont icon-books',
-      children: [
-        {path: '/book/list', component: BookList, name: '图书列表', menuShow: true},
-        {path: '/book/category', component: BookCategoryList, name: '图书分类', menuShow: true}
-      ]
-    },
-    {
-      path: '/',
-      component: Home,
-      name: '设置',
-      menuShow: true,
-      iconCls: 'iconfont icon-setting1',
-      children: [
-        {path: '/user/profile', component: UserProfile, name: '个人信息', menuShow: true},
-        {path: '/user/changepwd', component: UserChangePwd, name: '修改密码', menuShow: true}
-      ]
-    },
-    {
-      path: '/',
-      component: Home,
-      name: '错误收集',
-      menuShow: true,
-      iconCls: 'iconfont icon-setting1',
-      children: [
-        {path: '/errColl/errManage', component: ErrColl, name: '错误管理', menuShow: true}
-      ]
     }
+    // ,
+    // {
+    //   path: '/',
+    //   component: Home,
+    //   name: '用户管理',
+    //   menuShow: true,
+    //   leaf: true, // 只有一个节点
+    //   iconCls: 'iconfont icon-users', // 图标样式class
+    //   children: [
+    //     {path: '/user/list', component: UserList, name: '用户列表', menuShow: true}
+    //   ]
+    // },
+    // {
+    //   path: '/',
+    //   component: Home,
+    //   name: '图书管理',
+    //   menuShow: true,
+    //   iconCls: 'iconfont icon-books',
+    //   children: [
+    //     {path: '/book/list', component: BookList, name: '图书列表', menuShow: true},
+    //     {path: '/book/category', component: BookCategoryList, name: '图书分类', menuShow: true}
+    //   ]
+    // },
+    // {
+    //   path: '/',
+    //   component: Home,
+    //   name: '设置',
+    //   menuShow: true,
+    //   iconCls: 'iconfont icon-setting1',
+    //   children: [
+    //     {path: '/user/profile', component: UserProfile, name: '个人信息', menuShow: true},
+    //     {path: '/user/changepwd', component: UserChangePwd, name: '修改密码', menuShow: true}
+    //   ]
+    // },
+    // {
+    //   path: '/',
+    //   component: Home,
+    //   name: '错误收集',
+    //   menuShow: true,
+    //   iconCls: 'iconfont icon-setting1',
+    //   children: [
+    //     {path: '/errColl/errManage', component: ErrColl, name: '错误管理', menuShow: true}
+    //   ]
+    // }
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   // console.log('to:' + to.path)
-//   if (to.path.startsWith('/login')) {
-//     window.localStorage.removeItem('access-user')
-//     next()
-//   } else {
-//     let user = JSON.parse(window.localStorage.getItem('access-user'))
-//     if (!user) {
-//       next({path: '/login'})
-//     } else {
-//       next()
-//     }
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  // console.log('to:' + to.path)
+  if (to.path.startsWith('/login')) {
+    window.localStorage.removeItem('access-user')
+    next()
+  } else {
+    let user = JSON.parse(window.localStorage.getItem('access-user'))
+    if (!user) {
+      next({path: '/login'})
+    } else {
+      next()
+    }
+  }
+})
 
 export default router

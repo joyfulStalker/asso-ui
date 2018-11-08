@@ -17,14 +17,15 @@
 
 <script>
   import API from '../api/api_user';
-
+  import request from '@/utils/request';
   export default {
     data() {
       return {
+        menuList: [],
         loading: false,
         account: {
           username: 'admin',
-          pwd: '123456'
+          pwd: '123'
         },
         rules: {
           username: [
@@ -48,11 +49,63 @@
             let loginParams = {userName: this.account.username, password: this.account.pwd};
             API.login(loginParams).then(function (result) {
               that.loading = false;
-              if (result == 1) {
-                localStorage.setItem('access-user', JSON.stringify(result));
-//                that.$store.commit('SET_ROUTERS', user.permissions)
-//                that.$router.addRoutes(that.$store.getters.addRouters);
-//                that.$router.options.routes = that.$store.getters.routers;
+              if (result.data == 1) {
+
+                localStorage.setItem('access-user', JSON.stringify(result.data));
+               // console.log(that.$router.options);
+
+                request({
+                  url: '/menu/menuList',
+                  method: 'get'
+                }).then(result => {
+                  if(result.data.resultCode == 200){
+                    // this.menuList = result.data.data;
+                    result.data.data.forEach(element => {
+                      // console.log(resolve => require(['@/components/Home'], resolve));
+                      element.component = resolve => require(['@/components/'+element.component], resolve);
+                      element.children[0].component = resolve => require(['@/components/'+element.children[0].component ], resolve);
+                      // console.log(element.component);
+                      that.$router.options.routes.push(element);
+                    });
+                     console.log(that.$router.options);
+                  //  console.log( this.menuList)
+                  }else{
+                    }
+                      that.$router.addRoutes(that.$router.options.routes);//调用addRoutes添加路由
+                })
+
+                // that.$router.options.routes.push(
+                //   {
+                //         path: '/',
+                //         component: (resolve) => require(['./Home.vue'], resolve),
+                //         name: '图书管理1',
+                //         menuShow: 1,
+                //         iconCls: 'iconfont icon-books',
+                //         children: [
+                //           {path: '/book/list', component: (resolve) => require(['./book/list.vue'], resolve), name: '图书列表1',iconCls: 'iconfont icon-books', menuShow: true}
+                //         ]
+                //       }
+                // //   {//插入路由
+                // //   name:'list',
+                // //   path: 'list',
+                // //   component: resolve => require(['../template/list.vue'], resolve)//将组件用require引进来
+                // // }
+                // );
+                // that.$router.addRoutes(that.$router.options.routes);//调用addRoutes添加路由
+
+                // that.$router.addRoutes( [{
+                //         path: '/',
+                //         component: (resolve) => require(['./Home.vue'], resolve),
+                //         name: '图书管理1',
+                //         menuShow: true,
+                //         iconCls: 'iconfont icon-books',
+                //         children: [
+                //           {path: '/book/list', component: (resolve) => require(['./book/list.vue'], resolve), name: '图书列表1', menuShow: true}
+                //         ]
+                //       }])
+                // that.$store.commit('SET_ROUTERS', user.permissions)
+                // that.$router.addRoutes(that.$store.getters.addRouters);
+                // that.$router.options.routes = that.$store.getters.routers;
                 that.$router.push({path: '/'});
               } else {
                 that.$message.error({showClose: true, message: result.errmsg || '登录失败', duration: 2000});
