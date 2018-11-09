@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/Home'
 import Dashboard from '@/components/Dashboard'
-
+import lazyLoading from '../api/lazyLoading.js'
+import initNode from '../api/menu.js'
 import BookList from '@/components/book/list'
 import BookCategoryList from '@/components/bookcategory/list'
 
@@ -81,20 +82,41 @@ let router = new Router({
     // }
   ]
 })
+// initNode((ele) => {
+//     ele.component = lazyLoading(ele.component);
+//     ele.children.forEach(element => {
+//       this.initNode(element);
+//     });
+// })
+
+
 
 router.beforeEach((to, from, next) => {
-  // console.log('to:' + to.path)
   if (to.path.startsWith('/login')) {
     window.localStorage.removeItem('access-user')
     next()
   } else {
     let user = JSON.parse(window.localStorage.getItem('access-user'))
+    // console.log(user);
     if (!user) {
       next({path: '/login'})
     } else {
-      next()
+      let dRouter = JSON.parse(sessionStorage.getItem('d_router'));
+      if(dRouter){
+        let routesd = [];
+        dRouter.forEach(element => {
+          // this.initNode(element);
+          element.component = lazyLoading(element.component);
+          element.children[0].component = lazyLoading(element.children[0].component);
+          // console.log(element.children[0])
+          routesd.push(element);
+        });
+        console.log(routesd)
+        router.options.routes = routesd;
+        // console.log(router.options.routes);
+      }
+      // next()
     }
   }
 })
-
 export default router

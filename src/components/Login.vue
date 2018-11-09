@@ -18,6 +18,8 @@
 <script>
   import API from '../api/api_user';
   import request from '@/utils/request';
+  import lazyLoading from '../api/lazyLoading.js';
+  import store from '../api/store.js'
   export default {
     data() {
       return {
@@ -41,6 +43,12 @@
       };
     },
     methods: {
+      initNode(ele){
+         ele.component = lazyLoading(ele.component);
+         ele.children.forEach(element => {
+           this.initNode(element);
+         });
+      },
       handleLogin() {
         let that = this;
         this.$refs.AccountFrom.validate((valid) => {
@@ -51,62 +59,32 @@
               that.loading = false;
               if (result.data == 1) {
 
+                //设置缓存
                 localStorage.setItem('access-user', JSON.stringify(result.data));
                // console.log(that.$router.options);
-
                 request({
                   url: '/menu/menuList',
                   method: 'get'
                 }).then(result => {
                   if(result.data.resultCode == 200){
+                    //console.log(that.$router.options);
+                    sessionStorage.removeItem('d_router')
+                    // console.log(that.$router.options.routes)
+                    sessionStorage.setItem('d_router', JSON.stringify(result.data.data));
                     // this.menuList = result.data.data;
-                    result.data.data.forEach(element => {
-                      // console.log(resolve => require(['@/components/Home'], resolve));
-                      element.component = resolve => require(['@/components/'+element.component], resolve);
-                      element.children[0].component = resolve => require(['@/components/'+element.children[0].component ], resolve);
-                      // console.log(element.component);
-                      that.$router.options.routes.push(element);
-                    });
-                     console.log(that.$router.options);
-                  //  console.log( this.menuList)
+                    // result.data.data.forEach(element => {
+                    //   that.initNode(element);
+                    //   that.$router.options.routes.push(element);
+                    // });
+                     
+                    that.$router.push({path: '/'});
                   }else{
-                    }
-                      that.$router.addRoutes(that.$router.options.routes);//调用addRoutes添加路由
+                    that.$message.error('登录失败！');
+                  }
                 })
-
-                // that.$router.options.routes.push(
-                //   {
-                //         path: '/',
-                //         component: (resolve) => require(['./Home.vue'], resolve),
-                //         name: '图书管理1',
-                //         menuShow: 1,
-                //         iconCls: 'iconfont icon-books',
-                //         children: [
-                //           {path: '/book/list', component: (resolve) => require(['./book/list.vue'], resolve), name: '图书列表1',iconCls: 'iconfont icon-books', menuShow: true}
-                //         ]
-                //       }
-                // //   {//插入路由
-                // //   name:'list',
-                // //   path: 'list',
-                // //   component: resolve => require(['../template/list.vue'], resolve)//将组件用require引进来
-                // // }
-                // );
-                // that.$router.addRoutes(that.$router.options.routes);//调用addRoutes添加路由
-
-                // that.$router.addRoutes( [{
-                //         path: '/',
-                //         component: (resolve) => require(['./Home.vue'], resolve),
-                //         name: '图书管理1',
-                //         menuShow: true,
-                //         iconCls: 'iconfont icon-books',
-                //         children: [
-                //           {path: '/book/list', component: (resolve) => require(['./book/list.vue'], resolve), name: '图书列表1', menuShow: true}
-                //         ]
-                //       }])
                 // that.$store.commit('SET_ROUTERS', user.permissions)
                 // that.$router.addRoutes(that.$store.getters.addRouters);
                 // that.$router.options.routes = that.$store.getters.routers;
-                that.$router.push({path: '/'});
               } else {
                 that.$message.error({showClose: true, message: result.errmsg || '登录失败', duration: 2000});
               }
