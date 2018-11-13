@@ -18,8 +18,7 @@
 <script>
   import API from '../api/api_user';
   import request from '@/utils/request';
-  import lazyLoading from '../api/lazyLoading.js';
-  import store from '../api/store.js'
+  import store from '../store/store.js'
   export default {
     data() {
       return {
@@ -43,12 +42,6 @@
       };
     },
     methods: {
-      initNode(ele){
-         ele.component = lazyLoading(ele.component);
-         ele.children.forEach(element => {
-           this.initNode(element);
-         });
-      },
       handleLogin() {
         let that = this;
         this.$refs.AccountFrom.validate((valid) => {
@@ -61,30 +54,7 @@
 
                 //设置缓存
                 localStorage.setItem('access-user', JSON.stringify(result.data));
-               // console.log(that.$router.options);
-                request({
-                  url: '/menu/menuList',
-                  method: 'get'
-                }).then(result => {
-                  if(result.data.resultCode == 200){
-                    //console.log(that.$router.options);
-                    sessionStorage.removeItem('d_router')
-                    // console.log(that.$router.options.routes)
-                    sessionStorage.setItem('d_router', JSON.stringify(result.data.data));
-                    // this.menuList = result.data.data;
-                    // result.data.data.forEach(element => {
-                    //   that.initNode(element);
-                    //   that.$router.options.routes.push(element);
-                    // });
-                     
-                    that.$router.push({path: '/'});
-                  }else{
-                    that.$message.error('登录失败！');
-                  }
-                })
-                // that.$store.commit('SET_ROUTERS', user.permissions)
-                // that.$router.addRoutes(that.$store.getters.addRouters);
-                // that.$router.options.routes = that.$store.getters.routers;
+                that.$router.push({path: '/'});
               } else {
                 that.$message.error({showClose: true, message: result.errmsg || '登录失败', duration: 2000});
               }
