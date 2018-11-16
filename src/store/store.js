@@ -44,7 +44,7 @@ let store = new Vuex.Store({
     mutations: {
         //初始化菜单
         initMenu(state, menus) {
-            state.routes = constantRoutes.concat(menus);
+            state.routes = menus;
         }
     }
 });

@@ -1,8 +1,9 @@
 import request from './request'
 
-export const initMenu = (router, store) => {
+export const initMenu = (router, store,next) => {
     if (store.state.routes && store.state.routes.length > 2) {
         router.options.routes = store.state.routes;
+        next();
         return;
     }
     request({
@@ -14,9 +15,9 @@ export const initMenu = (router, store) => {
             for (let el of fmtRoutes) {
                 router.options.routes.push(el)
             }
-            router.options.isAddDynamicMenuRoutes = false;
             router.addRoutes(fmtRoutes);
-            // store.commit('initMenu', fmtRoutes);
+            store.commit('initMenu', router.options.routes);
+            next({path: '/'} );//跳转到首页，
         } else {
             that.$message.error('获取菜单失败！');
         }

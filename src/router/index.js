@@ -32,8 +32,8 @@ router.beforeEach((to, from, next) => {
     if (!user) {
       next({ path: '/login' })
     } else {
-      initMenu(router, store);
-      next();
+      initMenu(router, store,next);
+      // next();
     }
   }
 })
