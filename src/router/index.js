@@ -4,6 +4,7 @@ import Home from '@/components/Home'
 import Dashboard from '@/components/Dashboard'
 
 import store from '../store/store'
+import {constantRoutes} from '../store/store'
 import { initMenu } from '../utils/menuUtils'
 
 import BookList from '@/components/book/list'
@@ -18,30 +19,32 @@ const Login = resolve => require(['@/components/Login'], resolve)
 
 Vue.use(Router)
 
-export const constantRoutes = [
-  {
-    path: '/login',
-    name: '登录',
-    component: Login
-  },
-  {
-    path: '/',
-    name: 'home',
-    component: Home,
-    redirect: '/dashboard',
-    leaf: true, // 只有一个节点
-    menuShow: true,
-    iconCls: 'iconfont icon-home', // 图标样式class
-    children: [
-      { path: '/dashboard', component: Dashboard, name: '首页', menuShow: true }
-    ]
-  }
-];
-
 let router = new Router({
-  // mode: 'history',
-  routes:  constantRoutes
-  // [
+  routes:  store.getters.getRoutes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.path.startsWith('/login')) {
+    window.localStorage.removeItem('access-user')
+    next()
+  } else {
+    let user = JSON.parse(window.localStorage.getItem('access-user'))
+    if (!user) {
+      next({ path: '/login' })
+    } else {
+      initMenu(router, store);
+      next();
+    }
+  }
+})
+export default router
+
+
+
+
+
+//路由基础数据
+ // [
   //   {
   //     path: '/login',
   //     name: '登录',
@@ -104,22 +107,3 @@ let router = new Router({
   //   //   ]
   //   // }
   // ]
-})
-
-
-router.beforeEach((to, from, next) => {
-  if (to.path.startsWith('/login')) {
-    window.localStorage.removeItem('access-user')
-    next()
-  } else {
-    let user = JSON.parse(window.localStorage.getItem('access-user'))
-    // console.log(user);
-    if (!user) {
-      next({ path: '/login' })
-    } else {
-      initMenu(router, store);
-      next();
-    }
-  }
-})
-export default router

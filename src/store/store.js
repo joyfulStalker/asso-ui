@@ -1,34 +1,31 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
 Vue.use(Vuex);
 
 export const constantRoutes = [
     {
       path: '/login',
       name: '登录',
-      component: "Login"
+      component: (resolve)=> require(['../components/Login.vue'], resolve)
     },
     {
       path: '/',
       name: 'home',
-      component: "Home",
+      component: (resolve)=> require(['../components/Home.vue'], resolve),
       redirect: '/dashboard',
       leaf: true, // 只有一个节点
       menuShow: true,
       iconCls: 'iconfont icon-home', // 图标样式class
       children: [
-        { path: '/dashboard', component: "Dashboard", name: '首页', menuShow: true }
+        { path: '/dashboard', component: (resolve)=> require(['../components/Dashboard.vue'], resolve), name: '首页', menuShow: true }
       ]
     }
   ];
-
-
 let store = new Vuex.Store({
     // 1. state (类似存储全局变量的数据
     state: {
         //存放路由
-        routes: []
+        routes: constantRoutes
     },
 
     // // 2. getters 提供用来获取state数据的方法
@@ -47,7 +44,7 @@ let store = new Vuex.Store({
     mutations: {
         //初始化菜单
         initMenu(state, menus) {
-            state.routes = menus;
+            state.routes = constantRoutes.concat(menus);
         }
     }
 });

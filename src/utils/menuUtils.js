@@ -1,7 +1,8 @@
 import request from './request'
 
 export const initMenu = (router, store) => {
-    if (store.state.routes.length > 1) {
+    if (store.state.routes && store.state.routes.length > 2) {
+        router.options.routes = store.state.routes;
         return;
     }
     request({
@@ -10,8 +11,12 @@ export const initMenu = (router, store) => {
     }).then(result => {
         if (result.data.resultCode == 200) {
             var fmtRoutes = formatRoutes(result.data.data);
+            for (let el of fmtRoutes) {
+                router.options.routes.push(el)
+            }
+            router.options.isAddDynamicMenuRoutes = false;
             router.addRoutes(fmtRoutes);
-            store.commit('initMenu', fmtRoutes);
+            // store.commit('initMenu', fmtRoutes);
         } else {
             that.$message.error('获取菜单失败！');
         }
@@ -27,6 +32,8 @@ export const formatRoutes = (routes) => {
             name,
             // meta,
             iconCls,
+            leaf,
+            menuShow,
             children
         } = router;
         if (children && children instanceof Array) {
@@ -40,6 +47,8 @@ export const formatRoutes = (routes) => {
             name: name,
             iconCls: iconCls,
             // meta: meta,
+            leaf: leaf,
+            menuShow: menuShow,
             children: children
         };
         fmRoutes.push(fmRouter);
