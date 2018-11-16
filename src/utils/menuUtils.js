@@ -1,9 +1,9 @@
 import request from './request'
 
 export const initMenu = (router, store,next) => {
-    if (store.state.routes && store.state.routes.length > 2) {
+    if (store.state.routes && store.state.routes.length > 3) {
         router.options.routes = store.state.routes;
-        next();
+        next();//跳转下一步
         return;
     }
     request({
@@ -17,7 +17,7 @@ export const initMenu = (router, store,next) => {
             }
             router.addRoutes(fmtRoutes);
             store.commit('initMenu', router.options.routes);
-            next({path: '/'} );//跳转到首页，
+            next({path: '/'} );//跳转到首页，相当于刷新路由
         } else {
             that.$message.error('获取菜单失败！');
         }

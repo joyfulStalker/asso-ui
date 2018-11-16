@@ -19,7 +19,19 @@ export const constantRoutes = [
       children: [
         { path: '/dashboard', component: (resolve)=> require(['../components/Dashboard.vue'], resolve), name: '首页', menuShow: true }
       ]
-    }
+    },
+    {
+        path: '/',
+        name: '设置',
+        component: (resolve)=> require(['../components/Home.vue'], resolve),
+        redirect: '/dashboard',
+        leaf: false, // 只有一个节点
+        menuShow: true,
+        iconCls: 'iconfont icon-setting1', // 图标样式class
+        children: [
+          { path: '/settings/menu', component: (resolve)=> require(['../components/settings/menu/menu.vue'], resolve), name: '菜单配置', menuShow: true }
+        ]
+      }
   ];
 let store = new Vuex.Store({
     // 1. state (类似存储全局变量的数据
