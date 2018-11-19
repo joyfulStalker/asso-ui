@@ -63,9 +63,29 @@ export default {
   },
   created() {},
   mounted() {
+    if(!this.$parent.buttonStatus){
       this.form.pid = this.$parent.menuPid;
+    }else{
+      this.form.id = this.$parent.menuId;
+      //查询菜单详情进行回显
+      this.getDetail();
+    }
   },
   methods: {
+    getDetail(){
+      request({
+        url: "/menu/menuDetail",
+        method: "get",
+        params: {"id":this.form.id}
+      }).then(result => {
+        if (result.data.resultCode == 200) {
+          this.form = result.data.data;
+        } else {
+          this.$message.error("数据回显失败!");
+        }
+      });
+      
+    },
     handleBack() {
       this.$parent.menuId = "";
       this.$parent.menuPid = "";

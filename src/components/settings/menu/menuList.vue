@@ -22,7 +22,8 @@ export default {
       menuConfData: [],
       defaultProps: {
         children: "children",
-        label: "label"
+        label: "label",
+        id: ''
       }
     };
   },
@@ -38,27 +39,47 @@ export default {
         this.menuConfData = result.data.data;
       });
     },
-    checkedVolid(){
-        if(0 == this.$refs.tree.getCheckedNodes().length){
-            this.$message.error("请选择节点!");
-            return false;
-        }
-        if(1 < this.$refs.tree.getCheckedNodes().length){
-            this.$message.error("请选择一个节点!");
-            return false;
-        }
+    checkedVolid() {
+      if (0 == this.$refs.tree.getCheckedNodes().length) {
+        this.$message.error("请选择节点!");
+        return false;
+      }
+      if (1 < this.$refs.tree.getCheckedNodes().length) {
+        this.$message.error("请选择一个节点!");
+        return false;
+      }
     },
     addMenu() {
-        this.checkedVolid();
-        this.$parent.buttonStatus = false;
-        this.$parent.menuPid = this.$refs.tree.getCheckedNodes()[0].id;
-        this.$parent.show = 'menuAdd';
+      this.checkedVolid();
+      this.$parent.buttonStatus = false;
+      this.$parent.menuPid = this.$refs.tree.getCheckedNodes()[0].id;
+      this.$parent.show = "menuAdd";
     },
-    remMenu(){
-
+    remMenu() {
+      this.checkedVolid();
+      this.id = this.$refs.tree.getCheckedNodes()[0].id;
+      console.log(this.id)
+      request({
+        url: "/menu/remMenu",
+        method: "delete",
+        params: {"id": this.id}
+      }).then(result => {
+        if (result.data.resultCode == 200) {
+          this.getList();
+          this.$message({
+            message: "删除成功！",
+            type: "success"
+          });
+        } else {
+          this.$message.error("删除失败, " + result.data.errMsg + "!");
+        }
+      });
     },
-    updateMenu(){
-
+    updateMenu() {
+      this.checkedVolid();
+      this.$parent.buttonStatus = true;
+      this.$parent.menuId = this.$refs.tree.getCheckedNodes()[0].id;
+      this.$parent.show = "menuAdd";
     }
   }
 };

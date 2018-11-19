@@ -18,7 +18,7 @@ export default {
     return {
       //定义menu的全局变量
       show: "menuList",
-      buttonStatus: false,
+      buttonStatus: false,//false添加按钮 true更新按钮
       menuId: '',
       menuPid: ''
     };
