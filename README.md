@@ -69,7 +69,7 @@ git clone https://github.com/joyfulStalker/asso-ui.git
 ```
 
 
-### 笔记与心得
+## 笔记与心得
  > 2018-11-20
  >> 1.设置代理，修改/config/index.js。
   ``` bash
@@ -112,4 +112,5 @@ git clone https://github.com/joyfulStalker/asso-ui.git
         }
    ```
 
+## 
 注：项目参考了https://github.com/jerry9022/LitAdmin
