@@ -47,9 +47,9 @@ export default {
   data() {
     return {
       searchForm: {
-        searchKey: '',
-        page: '1',
-        rows: '10'
+        searchKey: "",
+        page: "1",
+        rows: "10"
       },
       users: [],
       total: 0,
@@ -63,20 +63,21 @@ export default {
     },
     handleCurrentChange(val) {
       this.page = val;
-      
     },
     handleSearch() {
       request({
         url: "/userAccount/userList",
         method: "get",
         params: this.searchForm
-      }).then(result => {
-        if (result.data.resultCode == 200) {
-          this.users = result.data.data;
-        } else {
-          this.$message.error("数据回显失败!");
-        }
-      }).catch(function(error) {
+      })
+        .then(result => {
+          if (result.data.resultCode == 200) {
+            this.users = result.data.data;
+          } else {
+            this.$message.error("数据回显失败!");
+          }
+        })
+        .catch(function(error) {
           this.loading = false;
           console.log(error);
           this.$message.error({

@@ -15,7 +15,7 @@ export const constantRoutes = [
       redirect: '/dashboard',
       leaf: true, // 只有一个节点
       menuShow: true,
-      iconCls: 'iconfont icon-home', // 图标样式class
+      iconCls: 'iconfont icon-wxbzhuye', // 图标样式class
       children: [
         { path: '/dashboard', component: (resolve)=> require(['../components/Dashboard.vue'], resolve), name: '首页', menuShow: true }
       ]
@@ -27,9 +27,9 @@ export const constantRoutes = [
         redirect: '/dashboard',
         leaf: false, // 只有一个节点
         menuShow: true,
-        iconCls: 'iconfont icon-setting1', // 图标样式class
+        iconCls: 'iconfont icon-shezhi', // 图标样式class
         children: [
-          { path: '/settings/menu', component: (resolve)=> require(['../components/settings/menu/menu.vue'], resolve), name: '菜单配置', menuShow: true }
+          { path: '/settings/menu', component: (resolve)=> require(['../components/settings/menu/menu.vue'], resolve), name: '菜单配置',iconCls: 'iconfont icon-all', menuShow: true }
         ]
       }
   ];
