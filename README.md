@@ -62,9 +62,9 @@ git clone https://github.com/joyfulStalker/asso-ui.git
   # DONE Compiled successfully in 7515ms
   # Listening at http://localhost:8081
    
-#正式环境编译命令
-# build for production with minification
-npm run build
+  #正式环境编译命令
+  # build for production with minification
+    npm run build
 
 ```
 
@@ -112,4 +112,4 @@ npm run build
         }
    ```
 
-
+注：项目参考了https://github.com/jerry9022/LitAdmin
