@@ -13,8 +13,9 @@
       </div>
       <div class="topbar-account topbar-btn">
         <el-dropdown trigger="click">
-          <span class="el-dropdown-link userinfo-inner"><i class="iconfont icon-accountfilling"></i> {{nickname}}个人中心  <i
-            class="iconfont icon-huo"></i></span>
+          <span class="el-dropdown-link userinfo-inner">
+           欢迎您！{{nickname}} <i class="iconfont icon-accountfilling"></i> 
+          </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
               <div @click="jumpTo('/user/profile')"><span style="color: #555;font-size: 14px;">个人信息</span></div>
@@ -139,7 +140,7 @@
       let user = localStorage.getItem('access-user');
       if (user) {
         user = JSON.parse(user);
-        this.nickname = user.nickname || '';
+        this.nickname = user.nickName || '';
       }
     }
   }

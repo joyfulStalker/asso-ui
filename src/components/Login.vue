@@ -50,8 +50,7 @@
             let loginParams = {userName: this.account.username, password: this.account.pwd};
             API.login(loginParams).then(function (result) {
               that.loading = false;
-              if (result.data == 1) {
-
+              if (result.resultCode == 200) {
                 //设置缓存
                 localStorage.setItem('access-user', JSON.stringify(result.data));
                 that.$router.push({path: '/'});

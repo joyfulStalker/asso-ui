@@ -11,10 +11,10 @@
     <el-col :span="24" class="warp-main">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="账号">
-          <el-input v-model="form.useranme" disabled></el-input>
+          <el-input v-model="form.userId" disabled></el-input>
         </el-form-item>
-        <el-form-item prop="nickname" label="昵称">
-          <el-input v-model="form.nickname"></el-input>
+        <el-form-item prop="nickName" label="昵称">
+          <el-input v-model="form.nickName"></el-input>
         </el-form-item>
         <el-form-item prop="name" label="姓名">
           <el-input v-model="form.name"></el-input>
@@ -39,13 +39,14 @@
       return {
         loading: false,
         form: {
-          useranme: '',
-          nickname: '',
+          id: '',
+          name: '',
+          nickName: '',
           name: '',
           email: ''
         },
         rules: {
-          nickname: [
+          nickName: [
             {required: true, message: '请输入昵称', trigger: 'blur'}
           ],
           email: [
@@ -61,24 +62,19 @@
         that.$refs.form.validate((valid) => {
           if (valid) {
             that.loading = true;
-            let args = {
-              nickname: that.form.nickname,
-              name: that.form.name,
-              email: that.form.email
-            };
-            API.changeProfile(args).then(function (result) {
+            API.changeProfile(this.form).then(function (result) {
               that.loading = false;
-              if (result && parseInt(result.errcode) === 0) {
+              if (result && result.resultCode == 200) {
                 //修改成功
                 let user = JSON.parse(window.localStorage.getItem('access-user'));
-                user.nickname = that.form.nickname;
+                user.nickName = that.form.nickName;
                 user.name = that.form.name;
                 user.email = that.form.email;
                 localStorage.setItem('access-user', JSON.stringify(user));
-                bus.$emit('setNickName', that.form.nickname);
+                bus.$emit('setNickName', that.form.nickName);
                 that.$message.success({showClose: true, message: '修改成功', duration: 2000});
               } else {
-                that.$message.error({showClose: true, message: result.errmsg, duration: 2000});
+                that.$message.error({showClose: true, message: result.errMsg, duration: 2000});
               }
             }, function (err) {
               that.loading = false;
@@ -96,10 +92,7 @@
       let user = localStorage.getItem('access-user');
       if (user) {
         user = JSON.parse(user);
-        this.form.useranme = user.username;
-        this.form.nickname = user.nickname || '';
-        this.form.email = user.email || '';
-        this.form.name = user.name || '';
+        this.form = user;
       }
     }
   }

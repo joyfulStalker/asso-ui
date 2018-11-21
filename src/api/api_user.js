@@ -15,7 +15,7 @@ export default {
   },
   //修改个人信息
   changeProfile: params => {
-    return API.PATCH('/mypath/v1/users/profile', params)
+    return API.POST('/mypath/userAccount/changeProfile', params)
   },
 
   //查询获取user列表(通过page分页)
