@@ -19,8 +19,7 @@ export default {
       //定义task的全局变量
       show: "taskList",
       buttonStatus: false,//false添加按钮 true更新按钮
-      taskId: '',
-      taskPid: ''
+      taskId: ''
     };
   },
   created() {},

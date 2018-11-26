@@ -44,11 +44,12 @@
           <el-table-column align="center" prop="jobGroup" label="任务组名" width="100"></el-table-column>
           <el-table-column align="center" prop="invokedUrl" label="被调用的url" width="300"></el-table-column>
           <el-table-column align="center" prop="createTime" label="创建时间" width="200"></el-table-column>
-          <el-table-column align="center" label="状态" width="100" prop="jobStatus"></el-table-column>
+          <el-table-column align="center" label="状态" width="80" prop="jobStatus" :formatter="formatStatus"></el-table-column>
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
-              <el-button type="info" size="small" icon="el-icon-edit"></el-button>
-              <el-button type="danger" icon="el-icon-remove" size="small" @click="handleDel(scope.row.id)"></el-button>
+              <el-button type="info" size="small" icon="el-icon-edit" @click="handleEidt(scope.row.id,scope.row.jobStatus)"></el-button>
+              <el-button type="danger" icon="iconfont icon-yunhang" size="small" @click="handleRun(scope.row.id,1)"></el-button>
+              <el-button type="danger" icon="el-icon-circle-close-outline" size="small" @click="handleStop(scope.row.id,0)"></el-button>
             </template>
           </el-table-column>
       </el-table>
@@ -59,51 +60,56 @@
   </div>
 </template>
 <script>
-import request from '@/utils/request';
+import request from "@/utils/request";
 export default {
   name: "errManage",
   data() {
     return {
-        visible2: false,
-        list:[],
-        listLoading: false,
-        total: null,
-        queryParm: {
-          jobName: '',
-          description: '',
-          jobGroup: '',
-          jobStatus: '',
-          page: 1,
-          rows: 10
-        },
-        cates:[{value: '1',name:'启动中'},{name: '未启动',value:'0'}]
-    }
+      visible2: false,
+      list: [],
+      listLoading: false,
+      total: null,
+      queryParm: {
+        jobName: "",
+        description: "",
+        jobGroup: "",
+        jobStatus: "",
+        page: 1,
+        rows: 10
+      },
+      cates: [{ value: "1", name: "启动中" }, { name: "未启动", value: "0" }]
+    };
   },
   created() {
     this.getList();
   },
-  mounted(){
-
-  },
+  mounted() {},
   methods: {
+    formatStatus: function(row, column) {
+      return row.jobStatus == 1
+        ? "运行中"
+        : row.jobStatus == 0
+          ? "已停止"
+          : "未知";
+    },
     getList() {
       request({
-        url: '/task/taskList',
-        method: 'post',
+        url: "/task/taskList",
+        method: "post",
         data: this.queryParm
       }).then(result => {
         this.list = result.data.data;
         this.total = result.data.total;
-      })
+      });
     },
     clear() {
       this.queryParm = {
-        errDescription: '',
-        errCauseBy: '',
-        errSolution: '',
+        errDescription: "",
+        errCauseBy: "",
+        errSolution: "",
         page: 1,
         rows: 10
-      }
+      };
     },
     handleSizeChange(val) {
       this.queryParm.rows = val;
@@ -113,36 +119,44 @@ export default {
       this.queryParm.page = val;
       this.getList();
     },
-    handleNew(){
-      this.$parent.show = 'taskAdd';
+    handleNew() {
+      this.$parent.show = "taskAdd";
     },
-    handleDel(id){
-      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            request({
-              url: '/errCollection/errDel?errCollId='+id,
-              method: 'post'
-            }).then(result => {
-              if(result.data.resultCode == 200){
-                this.getList();
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                });
-              }else{
-                this.$message.error('删除失败!');
-              }
-            })
-          }).catch(() => {
-                   
+    handleEidt(id,jobStatus){
+      if(1 == jobStatus){
+        this.$message({
+            message: "请先停止任务再进行修改！",
+            type: "warning"
           });
+          return false;
+      }
+      this.$parent.taskId = id;
+      this.$parent.show = "taskAdd";
+    },
+    //val 1运行  0 停止
+    handleRun(id, val) {
+      this.changeStatus(id,val,"运行");
+    },
+    handleStop(id, val) {
+      this.changeStatus(id,val,"停止")
+    },
+    changeStatus(id, val,str) {
+      request({
+        url: "/task/changeStatus",
+        method: "post",
+        data: {id:id,jobStatus:val}
+      }).then(result => {
+        if(result.data.resultCode == 200){
+          this.getList();
+          this.$message({
+            message: "恭喜你，"+str+"成功！",
+            type: "success"
+          });
+        }
+      });
     }
   }
-}
+};
 </script>
 <style>
-  
 </style>

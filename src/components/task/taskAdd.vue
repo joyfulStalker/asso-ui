@@ -71,9 +71,25 @@ export default {
       cates: [{ value: "java" }, { value: "vue" }, { value: "linux" }]
     };
   },
-  created() {},
+  created() {
+    this.form.id = this.$parent.taskId;
+    if(null != this.form.id && '' != this.form.id){
+      this.getData();
+    }
+  },
   mounted() {},
   methods: {
+    getData() {
+      request({
+        url: "/task/detail",
+        method: "get",
+        params: {id:this.form.id}
+      }).then(result => {
+        if (result.data.resultCode == 200) {
+          this.form = result.data.data;
+        }
+      });
+    },
     save(val) {
       if (val == 1) {
         this.form.jobStatus = 1;
