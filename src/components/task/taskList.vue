@@ -44,12 +44,18 @@
           <el-table-column align="center" prop="jobGroup" label="任务组名" width="100"></el-table-column>
           <el-table-column align="center" prop="invokedUrl" label="被调用的url" width="300"></el-table-column>
           <el-table-column align="center" prop="createTime" label="创建时间" width="200"></el-table-column>
-          <el-table-column align="center" label="状态" width="80" prop="jobStatus" :formatter="formatStatus"></el-table-column>
+          <el-table-column align="center" label="状态" width="80" prop="jobStatus">
+            <template slot-scope="scope">
+               <span v-if="scope.row.jobStatus == 1" style="color:green">运行中 </span>
+               <span v-else style="color:gray"> 已停止  </span>
+            </template>
+          </el-table-column>
           <el-table-column align="center" label="操作">
             <template slot-scope="scope">
               <el-button type="info" size="small" icon="el-icon-edit" @click="handleEidt(scope.row.id,scope.row.jobStatus)"></el-button>
-              <el-button type="danger" icon="iconfont icon-yunhang" size="small" @click="handleRun(scope.row.id,1)"></el-button>
+              <el-button type="success" icon="iconfont icon-yunhang" size="small" @click="handleRun(scope.row.id,1)"></el-button>
               <el-button type="danger" icon="el-icon-circle-close-outline" size="small" @click="handleStop(scope.row.id,0)"></el-button>
+              <el-button type="danger" icon="el-icon-remove" size="small" @click="handleDelete(scope.row.id)"></el-button>
             </template>
           </el-table-column>
       </el-table>
@@ -85,13 +91,6 @@ export default {
   },
   mounted() {},
   methods: {
-    formatStatus: function(row, column) {
-      return row.jobStatus == 1
-        ? "运行中"
-        : row.jobStatus == 0
-          ? "已停止"
-          : "未知";
-    },
     getList() {
       request({
         url: "/task/taskList",
@@ -122,34 +121,54 @@ export default {
     handleNew() {
       this.$parent.show = "taskAdd";
     },
-    handleEidt(id,jobStatus){
-      if(1 == jobStatus){
+    handleEidt(id, jobStatus) {
+      if (1 == jobStatus) {
         this.$message({
-            message: "请先停止任务再进行修改！",
-            type: "warning"
-          });
-          return false;
+          message: "请先停止任务再进行修改！",
+          type: "warning"
+        });
+        return false;
       }
       this.$parent.taskId = id;
       this.$parent.show = "taskAdd";
     },
     //val 1运行  0 停止
     handleRun(id, val) {
-      this.changeStatus(id,val,"运行");
+      this.changeStatus(id, val, "运行");
     },
     handleStop(id, val) {
-      this.changeStatus(id,val,"停止")
+      this.changeStatus(id, val, "停止");
     },
-    changeStatus(id, val,str) {
+    handleDelete(id) {
+      request({
+        url: "/task/delete",
+        method: "get",
+        params: { id: id }
+      }).then(result => {
+        if (result.data.resultCode == 200) {
+          this.getList();
+          this.$message({
+            message: "删除成功！",
+            type: "success"
+          });
+        } else {
+          this.$message({
+            message: result.data.errMsg,
+            type: "error"
+          });
+        }
+      });
+    },
+    changeStatus(id, val, str) {
       request({
         url: "/task/changeStatus",
         method: "post",
-        data: {id:id,jobStatus:val}
+        data: { id: id, jobStatus: val }
       }).then(result => {
-        if(result.data.resultCode == 200){
+        if (result.data.resultCode == 200) {
           this.getList();
           this.$message({
-            message: "恭喜你，"+str+"成功！",
+            message: "恭喜你，" + str + "成功！",
             type: "success"
           });
         }

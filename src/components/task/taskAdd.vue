@@ -64,7 +64,7 @@ export default {
         jobName: "",
         description: "",
         cronExpression: "",
-        jobStatus: "",
+        jobStatus: "0",
         jobGroup: "",
         invokedUrl: ""
       },
