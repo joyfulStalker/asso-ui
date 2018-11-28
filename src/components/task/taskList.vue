@@ -38,19 +38,19 @@
     <div style="margin:10px 0">
       <el-table :data="list" border >
           <el-table-column align="center" label="序号" width="65"  type="index"> </el-table-column>
-          <el-table-column align="center" prop="jobName" label="任务名称" width="100"></el-table-column>
-          <el-table-column align="center" prop="description" label="任务描述" width="100"></el-table-column>
-          <el-table-column align="center" prop="cronExpression" label="cron表达式" width="200"></el-table-column>
-          <el-table-column align="center" prop="jobGroup" label="任务组名" width="100"></el-table-column>
-          <el-table-column align="center" prop="invokedUrl" label="被调用的url" width="300"></el-table-column>
-          <el-table-column align="center" prop="createTime" label="创建时间" width="200"></el-table-column>
+          <el-table-column align="center" prop="jobName" label="任务名称"  width="100"></el-table-column>
+          <el-table-column align="center" prop="jobGroup" label="任务组名"  width="150"></el-table-column>
+          <el-table-column align="center" prop="cronExpression" label="cron表达式"  width="150"></el-table-column>
           <el-table-column align="center" label="状态" width="80" prop="jobStatus">
             <template slot-scope="scope">
                <span v-if="scope.row.jobStatus == 1" style="color:green">运行中 </span>
                <span v-else style="color:gray"> 已停止  </span>
             </template>
           </el-table-column>
-          <el-table-column align="center" label="操作">
+          <el-table-column align="center" prop="invokedUrl" label="被调用的url"  width="300"></el-table-column>
+          <el-table-column align="center" prop="description" label="任务描述"  width="300"></el-table-column>
+          <el-table-column align="center" prop="createTime" label="创建时间" width="200"></el-table-column>
+          <el-table-column align="center" label="操作"  fixed="right" width="280">
             <template slot-scope="scope">
               <el-button type="info" size="small" icon="el-icon-edit" @click="handleEidt(scope.row.id,scope.row.jobStatus)"></el-button>
               <el-button type="success" icon="iconfont icon-yunhang" size="small" @click="handleRun(scope.row.id,1)"></el-button>
@@ -83,7 +83,7 @@ export default {
         page: 1,
         rows: 10
       },
-      cates: [{ value: "1", name: "启动中" }, { name: "未启动", value: "0" }]
+      cates: [{ value: "", name: "全部" },{ value: "1", name: "启动中" }, { name: "未启动", value: "0" }]
     };
   },
   created() {
