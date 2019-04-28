@@ -11,7 +11,7 @@ export default {
   },
   //登出
   logout: params => {
-    return API.GET('/mypath/v1/users/logout', params)
+    return API.POST('/mypath/userAccount/logout', params)
   },
   //修改个人信息
   changeProfile: params => {
