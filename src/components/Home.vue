@@ -136,35 +136,15 @@ export default {
       this.$router.push(url); //用go刷新
     },
     logout() {
-      let that = this;
       this.$confirm("确认退出吗?", "提示", {
         confirmButtonClass: "el-button--warning"
-      })
-        .then(() => {
-          //确认
-          that.loading = true;
-          API.logout()
-            .then(
-              function(result) {
-                that.loading = false;
-                //公共方法清除用户信息
-                common.clearUserInfo();
-                that.$router.go("/login"); //用go刷新
-              },
-              function(err) {
-                that.loading = false;
-                //公共方法清除用户信息
-                common.clearUserInfo();
-                that.$router.go("/login"); //用go刷新
-              }
-            )
-            .catch(function(error) {
-              that.loading = false;
-              localStorage.removeItem("access-user");
-              that.$router.go("/login"); //用go刷新
-            });
-        })
-        .catch(() => {});
+      }).then(() => {
+        //确认
+        this.loading = false;
+        //公共方法清除用户信息
+        common.clearUserInfo();
+        this.$router.go("/login"); //用go刷新
+      });
     }
   },
   mounted() {
