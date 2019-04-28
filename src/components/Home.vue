@@ -74,6 +74,7 @@
 <script>
   import {bus} from '../bus.js'
   import API from '../api/api_user';
+  import common from './common'
 
   export default {
     name: 'home',
@@ -117,13 +118,13 @@
           that.loading = true;
           API.logout().then(function (result) {
             that.loading = false;
-            localStorage.removeItem('access-user');
-            localStorage.removeItem('token');
+            //公共方法清除用户信息
+            common.clearUserInfo();
             that.$router.go('/login'); //用go刷新
           }, function (err) {
             that.loading = false;
-            localStorage.removeItem('access-user');
-            localStorage.removeItem('token');
+            //公共方法清除用户信息
+            common.clearUserInfo();
             that.$router.go('/login'); //用go刷新
             // that.loading = false;
             // that.$message.error({showClose: true, message: err.toString(), duration: 2000});
