@@ -18,7 +18,8 @@
 <script>
   import API from '../api/api_user';
   import request from '@/utils/request';
-  import store from '../store/store.js'
+  import store from '../store/store.js';
+  import axios from 'axios';
   export default {
     data() {
       return {
@@ -53,7 +54,12 @@
               if (result.resultCode == 200) {
                 //设置缓存
                 localStorage.setItem('access-user', JSON.stringify(result.data));
+                localStorage.setItem('token', result.data.token);
+                store.commit("initToken",result.data.token);
+                //改变axios封装后的request的请求头默认值
+                axios.defaults.headers.common['Authorization'] = localStorage.getItem("token");
                 that.$router.push({path: '/'});
+                
               } else {
                 that.$message.error({showClose: true, message: result.errmsg || '登录失败', duration: 2000});
               }

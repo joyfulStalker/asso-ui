@@ -37,7 +37,8 @@ let store = new Vuex.Store({
     // 1. state (类似存储全局变量的数据
     state: {
         //存放路由
-        routes: constantRoutes
+        routes: constantRoutes,
+        token: ''
     },
 
     // // 2. getters 提供用来获取state数据的方法
@@ -45,6 +46,9 @@ let store = new Vuex.Store({
         //获取路由数据
         getRoutes(state) {
             return state.routes;
+        },
+        getToken(state){
+          return state.token;
         }
     },
     // 3. actions
@@ -57,7 +61,10 @@ let store = new Vuex.Store({
         //初始化菜单
         initMenu(state, menus) {
             state.routes = menus;
-        }
+        },
+        initToken(state,token) {
+          state.token = token;
+      },
     }
 });
 

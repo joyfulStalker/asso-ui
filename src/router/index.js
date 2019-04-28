@@ -25,15 +25,16 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.path.startsWith('/login')) {
-    window.localStorage.removeItem('access-user')
+    window.localStorage.removeItem('access-user');
+    localStorage.removeItem('token');
     next()
   } else {
     let user = JSON.parse(window.localStorage.getItem('access-user'))
-    if (!user) {
-      next({ path: '/login' })
-    } else {
+    //获取token和存活时间，判断是否过期
+    if(user && user.token && (user.tokenExpireTime + user.systemTime) > new Date().getTime()){
       initMenu(router, store,next);
-      // next();
+    }else{
+      next({ path: '/login' })
     }
   }
 })

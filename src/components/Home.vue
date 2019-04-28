@@ -118,10 +118,12 @@
           API.logout().then(function (result) {
             that.loading = false;
             localStorage.removeItem('access-user');
+            localStorage.removeItem('token');
             that.$router.go('/login'); //用go刷新
           }, function (err) {
             that.loading = false;
             localStorage.removeItem('access-user');
+            localStorage.removeItem('token');
             that.$router.go('/login'); //用go刷新
             // that.loading = false;
             // that.$message.error({showClose: true, message: err.toString(), duration: 2000});
