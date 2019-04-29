@@ -142,7 +142,7 @@ export default {
         //确认
         this.loading = false;
         //公共方法清除用户信息
-        common.clearUserInfo();
+        common.clearUserInfoByLogout();
         this.$router.go("/login"); //用go刷新
       });
     }

@@ -56,8 +56,6 @@
                 localStorage.setItem('access-user', JSON.stringify(result.data));
                 localStorage.setItem('token', result.data.token);
                 store.commit("initToken",result.data.token);
-                //改变axios封装后的request的请求头默认值
-                axios.defaults.headers.common['Authorization'] = localStorage.getItem("token");
                 that.$router.push({path: '/'});
                 
               } else {

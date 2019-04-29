@@ -61,17 +61,10 @@ export default {
               message: "恭喜你，密码修改成功！",
               type: "success"
             });
-          } else {
+          } 
+          else {
             this.$message.error(result.data.errMsg);
           }
-        }).catch(function(error) {
-          this.loading = false;
-          console.log(error);
-          this.$message.error({
-            showClose: true,
-            message: "请求出现异常",
-            duration: 2000
-          });
         });
     }
   }
