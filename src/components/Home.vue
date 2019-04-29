@@ -99,7 +99,6 @@
 
 <script>
 import { bus } from "../bus.js";
-import API from "../api/api_user";
 import common from "./common";
 
 export default {
@@ -141,9 +140,8 @@ export default {
       }).then(() => {
         //确认
         this.loading = false;
-        //公共方法清除用户信息
+        //公共方法 退出登录
         common.clearUserInfoByLogout();
-        this.$router.go("/login"); //用go刷新
       });
     }
   },

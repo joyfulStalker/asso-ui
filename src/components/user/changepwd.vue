@@ -2,7 +2,9 @@
   <el-row class="warp">
     <el-col :span="24" class="warp-breadcrum">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/' }"><b>首页</b></el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/' }">
+          <b>首页</b>
+        </el-breadcrumb-item>
         <el-breadcrumb-item>用户管理</el-breadcrumb-item>
         <el-breadcrumb-item>修改密码</el-breadcrumb-item>
       </el-breadcrumb>
@@ -28,6 +30,7 @@
 </template>
 <script>
 import request from "@/utils/request";
+import common from "../common";
 export default {
   data() {
     return {
@@ -36,19 +39,19 @@ export default {
         newPassword: "",
         confirmPwd: ""
       }
-    }
+    };
   },
   methods: {
-    handleClear(){
+    handleClear() {
       this.form = {
         oldPassword: "",
         newPassword: "",
         confirmPwd: ""
-      }
+      };
     },
     handleChangepwd() {
       //判断newPassword和confirmPwd是否一致
-      if(this.form.newPassword != this.form.confirmPwd){
+      if (this.form.newPassword != this.form.confirmPwd) {
         this.$message.error("新密码和确认密码不一致!");
       }
       request({
@@ -56,16 +59,17 @@ export default {
         method: "post",
         data: this.form
       }).then(result => {
-          if (result.data.resultCode == 200) {
-            this.$message({
-              message: "恭喜你，密码修改成功！",
-              type: "success"
-            });
-          } 
-          else {
-            this.$message.error(result.data.errMsg);
-          }
-        });
+        if (result.data.resultCode == 200) {
+          this.$confirm("恭喜你，密码修改成功！请重新登录", "提示", {
+            confirmButtonClass: "el-button--warning"
+          }).then(() => {
+            this.loading = false;
+            common.clearUserInfoByLogout();
+          });
+        } else {
+          this.$message.error(result.data.errMsg);
+        }
+      });
     }
   }
 };

@@ -1,5 +1,6 @@
 <script type="text/javascript">
 import request from "@/utils/request";
+import router from "../router/index";
 //-------------公共的常量
 //const httpUrl = 'http://39.105.17.99:8080/'
 
@@ -16,6 +17,8 @@ function clearUserInfoByLogout() {
   }).then(result => {
     //响应后再去清除用户信息，否则后台拿不到token信息
     clearUserInfo();
+    //这句要写在这，不然跳不到登录页面
+    router.go("/login"); //用go刷新
   });
 }
 /**
